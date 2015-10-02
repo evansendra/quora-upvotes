@@ -1,0 +1,17 @@
+{
+  "manifest_version": 2,
+
+  "name": "Quora Upvotes",
+  "description": "Sorts quora answers by upvotes",
+  "version": "1.0",
+
+  "content_scripts": [
+    {
+      "matches": ["*://www.quora.com/*"],
+      "js": ["js/jquery.js", "js/upvotes.js"],
+      "run_at": "document_end"
+    }
+  ],
+
+  "permissions": ["tabs", "*://www.quora.com/*"]
+}
