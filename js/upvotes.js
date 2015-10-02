@@ -1,5 +1,5 @@
 $(document).ready(function() {
-	var DEBUG = true;
+	var DEBUG = false;
 
 	if ( $(".related_questions" ).length )
 	{

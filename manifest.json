@@ -5,6 +5,8 @@
   "description": "Sorts quora answers by upvotes",
   "version": "1.0",
 
+  "icons": { "128": "icon128.png" },
+
   "content_scripts": [
     {
       "matches": ["*://www.quora.com/*"],
