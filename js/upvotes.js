@@ -1,15 +1,31 @@
 $(document).ready(function() {
 	var DEBUG = false;
 
-	if ( $(".related_questions" ).length )
+	var isQuestion = $(".related_questions" ).length
+	if ( isQuestion )
 	{
 		if (DEBUG)
 			console.log( "is question" );	
 
-		var sort_btn = "<li id='added_sort_btn' class='menu_list_item'>" +
-		"<span class='light_gray'><span><a href='#'>Sort by Votes</a></span></span></li>";
+		$(".overflow_link a").first().click(function() {
+			var sort_btn = "<li id='added_sort_btn' class='menu_list_item'>" +
+			"<span class='light_gray'><span><a href='#'>Sort by Votes</a></span></span></li>";
 
-		$('.hover_menu_contents > .menu_list_items').first().append(sort_btn);
+			setTimeout(function() {
+				var attachTo = $(".hover_menu_contents .menu_list_items").first();
+				if ( attachTo.find('#added_sort_btn').length <= 0 ) 
+				{
+					attachTo.append(sort_btn);
+					if (DEBUG)
+						console.log($('.unified_menu').size());
+				}
+
+				$( "#added_sort_btn" ).click( function() {
+					sort_questions();
+				});
+			}, 300);
+		});
+		
 	}
 
 	function sort_questions () {
@@ -49,9 +65,5 @@ $(document).ready(function() {
 		}
 
 	}
-
-	$( "#added_sort_btn" ).click( function() {
-		sort_questions();
-	});
 
 });
