@@ -8,11 +8,14 @@ $(document).ready(function() {
 			console.log( "is question" );	
 
 		$(".overflow_link a").first().click(function() {
+			if (DEBUG)
+				console.log('made it');
+			
 			var sort_btn = "<li id='added_sort_btn' class='menu_list_item'>" +
 			"<span class='light_gray'><span><a href='#'>Sort by Votes</a></span></span></li>";
 
 			setTimeout(function() {
-				var attachTo = $(".hover_menu_contents .menu_list_items").first();
+				var attachTo = $(".overflow_link .menu_list_items").first();
 				if ( attachTo.find('#added_sort_btn').length <= 0 ) 
 				{
 					attachTo.append(sort_btn);
