@@ -3,7 +3,7 @@
 
   "name": "Quora Upvotes",
   "description": "Sorts quora answers by upvotes",
-  "version": "1.0.2",
+  "version": "1.0.3",
 
   "icons": { "128": "icon128.png" },
 
