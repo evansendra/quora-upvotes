@@ -1,13 +1,14 @@
 $(document).ready(function() {
 	var DEBUG = false;
 
-	var isQuestion = $(".related_questions" ).length
+	var isQuestion = $('h3:contains("Related Questions")').length;
+  console.log(isQuestion);
 	if ( isQuestion )
 	{
 		if (DEBUG)
-			console.log( "is question" );	
+			console.log( "is question" );
 
-		$(".overflow_link a").first().click(function() {
+		$(".overflow_link > a").first().click(function() {
 			if (DEBUG)
 				console.log('made it');
 			
