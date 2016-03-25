@@ -17,7 +17,7 @@ $(document).ready(function() {
 
 			setTimeout(function() {
 				var attachTo = $(".overflow_link .menu_list_items").first();
-				if ( attachTo.find('#added_sort_btn').length <= 0 ) 
+				if ( attachTo.find('#added_sort_btn').length <= 0 )
 				{
 					attachTo.append(sort_btn);
 					if (DEBUG)
@@ -33,9 +33,15 @@ $(document).ready(function() {
 	}
 
 	function sort_questions () {
-		var answers = $( ".AnswerPagedList > .pagedlist_item" ).toArray();
-		if (DEBUG)
-			console.log(Array.isArray(answers));
+    var elts = $( ".AnswerPagedList > .pagedlist_item");
+    var answers = elts
+      .not(".pagedlist_hidden")
+      .toArray();
+    var hidden_answers = $( ".AnswerPagedList > .pagedlist_hidden" );
+		if (DEBUG) {
+      console.log(Array.isArray(answers));
+    }
+
 
 		for (var i = 0; i < answers.length; ++i) {
 			answers[i].upvotes = $( answers[i] ).find( ".count" ).first().text();
@@ -61,12 +67,21 @@ $(document).ready(function() {
 			return b.upvotes - a.upvotes;
 		});
 
-		// re render the elements based on upvote sort	
-		$( ".AnswerPagedList" ).empty();
+		// re render the elements based on upvote sort
+    var ajaxElem = $( ".AnswerPagedList" ).children().not(".pagedlist_item");
+		ajaxElem.detach();
+    console.log("Ajaxy thing: ", ajaxElem);
+    $( ".AnswerPagedList" ).empty();
 
 		for (i = 0; i < answers.length - 1; ++i) {
 			$( ".AnswerPagedList" ).append(	answers[i] );
 		}
+
+    hidden_answers.each(function() {
+      $( ".AnswerPagedList" ).append(this);
+    });
+
+    $( ".AnswerPagedList").append(ajaxElem);
 
 	}
 
