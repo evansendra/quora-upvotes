@@ -13,9 +13,15 @@ $(document).ready(function() {
             var sort_btn = "<li id='added_sort_btn' class='menu_list_item'>" +
             "<span class='light_gray'><span><a href='#'>Sort by Votes</a></span></span></li>";
 
-            setTimeout(function() {
+            var add_btn_timer = setInterval(function() {
                 var attachTo = $(".overflow_link .menu_list_items").first();
-                if ( attachTo.find('#added_sort_btn').length <= 0 )
+                if (DEBUG) console.log('keep trying to add button');
+                if ( attachTo.find('#added_sort_btn').length > 0 )
+                {
+                    if (DEBUG) console.log('already attached');
+                    clearInterval(add_btn_timer);
+                }
+                else
                 {
                     attachTo.append(sort_btn);
                     if (DEBUG) console.log($('.unified_menu').size());
@@ -24,61 +30,63 @@ $(document).ready(function() {
                 $( "#added_sort_btn" ).click( function() {
                     sort_questions();
                 });
-            }, 300);
+            }, 200);
         });
         
     }
 
     function sort_questions () {
-    var elts = $( ".AnswerPagedList > .pagedlist_item");
-    var answers = elts
-      .not(".pagedlist_hidden")
-      .toArray();
-    var hidden_answers = $( ".AnswerPagedList > .pagedlist_hidden" );
+        var elts = $( ".AnswerPagedList > .pagedlist_item");
+        var answers = elts
+          .not(".pagedlist_hidden")
+          .toArray();
+        var hidden_answers = $( ".AnswerPagedList > .pagedlist_hidden" );
 
-    if (DEBUG) console.log(Array.isArray(answers));
-
-
-        for (var i = 0; i < answers.length; ++i) {
-            answers[i].upvotes = $( answers[i] ).find( ".count" ).first().text();
-
-            if (answers[i].upvotes.includes("k"))
-                answers[i].upvotes = parseInt(answers[i].upvotes) * 1000;
-        }
+        if (DEBUG) console.log(Array.isArray(answers));
 
 
-        for (i = 0; i < answers.length; ++i) {
-            if (DEBUG) console.log(answers[i].upvotes);
-        }
+            for (var i = 0; i < answers.length; ++i) {
+                answers[i].upvotes = $( answers[i] ).find( ".count" ).first().text();
 
-        // sort the oject of answer elements by upvotes
-        answers.sort( function(a, b) {
-            if (DEBUG)
-            {
-                console.log(typeof a.upvotes);
-                console.log(a.upvotes);
+                if (answers[i].upvotes.includes("k"))
+                    answers[i].upvotes = parseInt(answers[i].upvotes) * 1000;
             }
 
-            return b.upvotes - a.upvotes;
-        });
 
-        // re render the elements based on upvote sort
-    var ajaxElem = $( ".AnswerPagedList" ).children().not(".pagedlist_item");
-        ajaxElem.detach();
+            if (DEBUG) {
+                for (i = 0; i < answers.length; ++i) {
+                     console.log(answers[i].upvotes);
+                }
+            }
 
-    if (DEBUG) console.log("Ajaxy thing: ", ajaxElem);
+            // sort the oject of answer elements by upvotes
+            answers.sort( function(a, b) {
+                if (DEBUG)
+                {
+                    console.log(typeof a.upvotes);
+                    console.log(a.upvotes);
+                }
 
-    $( ".AnswerPagedList" ).empty();
+                return b.upvotes - a.upvotes;
+            });
+
+            // re render the elements based on upvote sort
+        var ajaxElem = $( ".AnswerPagedList" ).children().not(".pagedlist_item");
+            ajaxElem.detach();
+
+        if (DEBUG) console.log("Ajaxy thing: ", ajaxElem);
+
+        $( ".AnswerPagedList" ).empty();
 
         for (i = 0; i < answers.length - 1; ++i) {
             $( ".AnswerPagedList" ).append( answers[i] );
         }
 
-    hidden_answers.each(function() {
-      $( ".AnswerPagedList" ).append(this);
-    });
+        hidden_answers.each(function() {
+          $( ".AnswerPagedList" ).append(this);
+        });
 
-    $( ".AnswerPagedList").append(ajaxElem);
+        $( ".AnswerPagedList").append(ajaxElem);
 
     }
 
