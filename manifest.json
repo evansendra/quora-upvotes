@@ -3,7 +3,7 @@
 
   "name": "Quora Upvotes",
   "description": "Sorts quora answers by upvotes",
-  "version": "1.0.3",
+  "version": "1.0.6",
 
   "icons": { "128": "icon128.png" },
 
@@ -15,5 +15,5 @@
     }
   ],
 
-  "permissions": ["tabs", "*://www.quora.com/*"]
+  "permissions": ["*://www.quora.com/*"]
 }
