@@ -2,7 +2,8 @@ $(document).ready(function() {
     var DEBUG = false;
 
     var isQuestion = $('h3:contains("Related Questions")').length;
-  console.log(isQuestion);
+    if (DEBUG)
+        console.log(isQuestion);
     if ( isQuestion )
     {
         if (DEBUG)
@@ -38,9 +39,9 @@ $(document).ready(function() {
       .not(".pagedlist_hidden")
       .toArray();
     var hidden_answers = $( ".AnswerPagedList > .pagedlist_hidden" );
-        if (DEBUG) {
+
+    if (DEBUG) 
       console.log(Array.isArray(answers));
-    }
 
 
         for (var i = 0; i < answers.length; ++i) {
@@ -70,7 +71,10 @@ $(document).ready(function() {
         // re render the elements based on upvote sort
     var ajaxElem = $( ".AnswerPagedList" ).children().not(".pagedlist_item");
         ajaxElem.detach();
-    console.log("Ajaxy thing: ", ajaxElem);
+
+    if (DEBUG)
+        console.log("Ajaxy thing: ", ajaxElem);
+    
     $( ".AnswerPagedList" ).empty();
 
         for (i = 0; i < answers.length - 1; ++i) {
