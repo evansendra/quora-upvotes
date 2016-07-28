@@ -1,30 +1,39 @@
 $(document).ready(function() {
-    var DEBUG = false;
+    const DEBUG = false;
+
+    /**
+     * debugging function
+     *
+     * prints {msg}(any) to the console
+     */
+    function d(msg) {
+        if (DEBUG) console.log(msg);
+    }
 
     var isQuestion = $('h3:contains("Related Questions")').length;
-    if (DEBUG) console.log(isQuestion);
+    d(isQuestion);
     if ( isQuestion )
     {
-        if (DEBUG) console.log( "is question" );
+        d( "is question" );
 
         $(".overflow_link > a").first().click(function() {
-            if (DEBUG) console.log('made it');
+            d('made it');
             
             var sort_btn = "<li id='added_sort_btn' class='menu_list_item'>" +
             "<span class='light_gray'><span><a href='#'>Sort by Votes</a></span></span></li>";
 
             var add_btn_timer = setInterval(function() {
                 var attachTo = $(".overflow_link .menu_list_items").first();
-                if (DEBUG) console.log('keep trying to add button');
+                d('keep trying to add button');
                 if ( attachTo.find('#added_sort_btn').length > 0 )
                 {
-                    if (DEBUG) console.log('already attached');
+                    d('already attached');
                     clearInterval(add_btn_timer);
                 }
                 else
                 {
                     attachTo.append(sort_btn);
-                    if (DEBUG) console.log($('.unified_menu').size());
+                    d($('.unified_menu').size());
                 }
 
                 $( "#added_sort_btn" ).click( function() {
@@ -42,7 +51,7 @@ $(document).ready(function() {
           .toArray();
         var hidden_answers = $( ".AnswerPagedList > .pagedlist_hidden" );
 
-        if (DEBUG) console.log(Array.isArray(answers));
+        d(Array.isArray(answers));
 
 
             for (var i = 0; i < answers.length; ++i) {
@@ -74,7 +83,7 @@ $(document).ready(function() {
         var ajaxElem = $( ".AnswerPagedList" ).children().not(".pagedlist_item");
             ajaxElem.detach();
 
-        if (DEBUG) console.log("Ajaxy thing: ", ajaxElem);
+        d("Ajaxy thing: " + String(ajaxElem));
 
         $( ".AnswerPagedList" ).empty();
 
