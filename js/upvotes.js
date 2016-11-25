@@ -69,7 +69,7 @@ function sort_answers() {
     for (var i = 0; i < shown_answers.length; ++i) {
         shown_answers[i].upvotes = $(shown_answers[i]).find(".count").first().text();
         if (shown_answers[i].upvotes.includes("k")) {
-            shown_answers[i].upvotes = parseInt(shown_answers[i].upvotes) * 1000;
+            shown_answers[i].upvotes = parseFloat(shown_answers[i].upvotes) * 1000;
         }
     }
 
