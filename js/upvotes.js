@@ -1,47 +1,24 @@
-$(document).ready(function() {
-    const DEBUG = false;
+const DEBUG = false;
 
-    /**
-     * debugging function
-     *
-     * prints {msg}(any) to the console
-     */
-    function d(msg) {
-        if (DEBUG) console.log(msg);
+/**
+ * debugging function
+ *
+ * prints {msg}(any) to the console
+ */
+function d(msg) {
+    if (DEBUG) {
+        // add "quora upvotes" prefix so we can use filtering in debugtools
+        console.log("quora upvotes: " + msg);
     }
+}
 
+$(document).ready(function() {
     var isQuestion = $('h3:contains("Related Questions")').length;
-    d(isQuestion);
-    if ( isQuestion )
-    {
-        d( "is question" );
 
-        $(".overflow_link > a").first().click(function() {
-            d('made it');
-            
-            var sort_btn = "<li id='added_sort_btn' class='menu_list_item'>" +
-            "<span class='light_gray'><span><a href='#'>Sort by Votes</a></span></span></li>";
+    d("is question = " + isQuestion);
 
-            var add_btn_timer = setInterval(function() {
-                var attachTo = $(".overflow_link .menu_list_items").first();
-                d('keep trying to add button');
-                if ( attachTo.find('#added_sort_btn').length > 0 )
-                {
-                    d('already attached');
-                    clearInterval(add_btn_timer);
-                }
-                else
-                {
-                    attachTo.append(sort_btn);
-                    d($('.unified_menu').size());
-                }
-
-                $( "#added_sort_btn" ).click( function() {
-                    sort_questions();
-                });
-            }, 200);
-        });
-        
+    if (isQuestion) {
+        add_sort_btn();
     }
 
     function sort_questions () {
@@ -100,3 +77,33 @@ $(document).ready(function() {
     }
 
 });
+
+// This function adds a sort button to the question dropdown list.
+function add_sort_btn() {
+    $(".overflow_link > a").first().click(function() {
+        // only try to add sort_btn when it is not yet added
+        if (!$("#added_sort_btn").length) {
+            // set a timer to repeatedly trying to add the sort_btn because sometimes
+            // Quora is not able able to render the dropdown menu by the time we try
+            // to add the sort_btn, thus we keep trying until finally added the btn.
+            var add_btn_timer = setInterval(function() {
+                d('keep trying to add sort_btn');
+
+                // find the dropdown menu
+                var attachTo = $(".overflow_link .menu_list_items").first();
+
+                if (attachTo.find('#added_sort_btn').length > 0) {
+                    d('already attached');
+                    clearInterval(add_btn_timer);
+                } else {
+                    d('adding sort_btn');
+                    var sort_btn = "<li id='added_sort_btn' class='menu_list_item'>" +
+                    "<span class='light_gray'><span><a href='#'>Sort by Votes</a></span></span></li>";
+
+                    attachTo.append(sort_btn);
+                    $("#added_sort_btn").click(sort_questions);
+                }
+            }, 200);
+        }
+    });
+}
