@@ -20,62 +20,6 @@ $(document).ready(function() {
     if (isQuestion) {
         add_sort_btn();
     }
-
-    function sort_questions () {
-        var elts = $( ".AnswerPagedList > .pagedlist_item");
-        var answers = elts
-          .not(".pagedlist_hidden")
-          .toArray();
-        var hidden_answers = $( ".AnswerPagedList > .pagedlist_hidden" );
-
-        d(Array.isArray(answers));
-
-
-            for (var i = 0; i < answers.length; ++i) {
-                answers[i].upvotes = $( answers[i] ).find( ".count" ).first().text();
-
-                if (answers[i].upvotes.includes("k"))
-                    answers[i].upvotes = parseInt(answers[i].upvotes) * 1000;
-            }
-
-
-            if (DEBUG) {
-                for (i = 0; i < answers.length; ++i) {
-                     console.log(answers[i].upvotes);
-                }
-            }
-
-            // sort the oject of answer elements by upvotes
-            answers.sort( function(a, b) {
-                if (DEBUG)
-                {
-                    console.log(typeof a.upvotes);
-                    console.log(a.upvotes);
-                }
-
-                return b.upvotes - a.upvotes;
-            });
-
-            // re render the elements based on upvote sort
-        var ajaxElem = $( ".AnswerPagedList" ).children().not(".pagedlist_item");
-            ajaxElem.detach();
-
-        d("Ajaxy thing: " + String(ajaxElem));
-
-        $( ".AnswerPagedList" ).empty();
-
-        for (i = 0; i < answers.length - 1; ++i) {
-            $( ".AnswerPagedList" ).append( answers[i] );
-        }
-
-        hidden_answers.each(function() {
-          $( ".AnswerPagedList" ).append(this);
-        });
-
-        $( ".AnswerPagedList").append(ajaxElem);
-
-    }
-
 });
 
 // This function adds a sort button to the question dropdown list.
@@ -101,9 +45,46 @@ function add_sort_btn() {
                     "<span class='light_gray'><span><a href='#'>Sort by Votes</a></span></span></li>";
 
                     attachTo.append(sort_btn);
-                    $("#added_sort_btn").click(sort_questions);
+                    $("#added_sort_btn").click(sort_answers);
                 }
             }, 200);
         }
     });
+}
+
+// This function will sort all currently shown answers by upvotes.
+// However, if the question has a lot of answers,
+// which will only be loaded later when users scroll down,
+// then this function will need to be invoked again (somehow).
+function sort_answers() {
+    // find all shown_answers
+    var answers = $(".AnswerPagedList > .pagedlist_item");
+    var shown_answers = answers.not(".pagedlist_hidden");
+
+    shown_answers.detach();
+
+    shown_answers = shown_answers.toArray();
+
+    // find shown_answers' upvotes
+    for (var i = 0; i < shown_answers.length; ++i) {
+        shown_answers[i].upvotes = $(shown_answers[i]).find(".count").first().text();
+        if (shown_answers[i].upvotes.includes("k")) {
+            shown_answers[i].upvotes = parseInt(shown_answers[i].upvotes) * 1000;
+        }
+    }
+
+    // sort the answers by upvotes in decreasing order
+    shown_answers.sort(function(a, b) {
+        return b.upvotes - a.upvotes;
+    });
+
+    for (i = 0; i < shown_answers.length; ++i) {
+        d(shown_answers[i].upvotes);
+    }
+
+    // reinsert the shown_answers based on upvotes
+    // in reverse order because we use before()
+    for (i = shown_answers.length - 1; i >= 0; --i) {
+        $(".AnswerPagedList").children().first().before(shown_answers[i]);
+    }
 }
